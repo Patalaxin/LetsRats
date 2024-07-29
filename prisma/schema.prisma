@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Rates {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  score   Int    @db.Int
+  summary String @db.String
+}
+
+enum RolesTypes {
+  Admin
+  User
+  Manager
+}
+
+model User {
+  id       String      @id @default(auto()) @map("_id") @db.ObjectId
+  email    String      @unique
+  password String
+  role     RolesTypes? @default(User)
+}
+
+model Token {
+  id           String   @id @default(uuid()) @map("_id")
+  email        String   @unique
+  refreshToken String
+  expireAt     DateTime @default(now())
+}
+
+model SessionId {
+  id String @id @default(uuid()) @map("_id")
+}
