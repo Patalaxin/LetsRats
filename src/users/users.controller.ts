@@ -18,14 +18,15 @@ import { UpdateUserRoleDtoRequest, UpdateUserRoleDtoResponse } from './dto/updat
 import { ChangeUserPassDtoRequest, ChangeUserPassDtoResponse } from './dto/change-user-pass.dto';
 import { ForgotUserPassDtoRequest, ForgotUserPassDtoResponse } from './dto/forgot-user-pass.dto';
 import { DeleteAllUsersDtoResponse, DeleteUserDtoResponse } from './dto/delete-user.dto';
-import { CreateUserDtoRequest, CreateUserDtoResponse } from "./dto/create-user.dto";
+import { CreateUserDtoRequest, CreateUserDtoResponse } from './dto/create-user.dto';
 import { RolesGuard } from '../guards/roles.guard';
 import { TokensGuard } from '../guards/tokens.guard';
 import { GetEmailFromToken } from '../decorators/getEmail.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import { IUser } from '../domain/user/user.interface';
-import { RolesTypes, SessionId, User } from '@prisma/client';
-import { GetUserDtoResponse } from "./dto/get-user.dto";
+import { RolesTypes, SessionId } from '@prisma/client';
+import { GetUserDtoResponse } from './dto/get-user.dto';
+import { SessionIdDtoResponse } from "./dto/create-sessionId.dto";
 
 @ApiTags('User API')
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class UsersController {
   @Roles()
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Create User' })
+  @ApiOkResponse({ description: 'Successful response', type: CreateUserDtoResponse })
   @Post()
   async create(@Body() createUserDto: CreateUserDtoRequest): Promise<CreateUserDtoResponse> {
     return this.userInterface.createUser(createUserDto);
@@ -46,6 +48,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get User By Email' })
+  @ApiOkResponse({ description: 'Successful response', type: GetUserDtoResponse })
   @Get()
   async getOne(@GetEmailFromToken() email: string): Promise<GetUserDtoResponse> {
     return this.userInterface.findUser(email);
@@ -54,9 +57,13 @@ export class UsersController {
   @UseGuards(TokensGuard)
   @Roles(RolesTypes.Admin)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Find All Users' })
+  @ApiOperation({ summary: 'Find All Users [Admin]' })
+  @ApiOkResponse({
+    description: 'Successful response',
+    type: [GetUserDtoResponse],
+  })
   @Get('/findAll')
-  findAll(): Promise<GetUserDtoResponse[]> {
+  async findAll(): Promise<GetUserDtoResponse[]> {
     return this.userInterface.findAll();
   }
 
@@ -87,7 +94,7 @@ export class UsersController {
   @Roles(RolesTypes.Admin)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update The User Role' })
+  @ApiOperation({ summary: 'Update The User Role [Admin]' })
   @ApiOkResponse({ description: 'Success', type: UpdateUserRoleDtoResponse })
   @Put('/updateRole')
   updateRole(@Body() updateUserRoleDto: UpdateUserRoleDtoRequest): Promise<UpdateUserRoleDtoResponse> {
@@ -97,7 +104,7 @@ export class UsersController {
   @UseGuards(TokensGuard)
   @Roles(RolesTypes.Admin)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete User By Email' })
+  @ApiOperation({ summary: 'Delete User By Email [Admin]' })
   @ApiOkResponse({ description: 'Success', type: DeleteUserDtoResponse })
   @Delete(':email')
   deleteOne(@Param('email') email: string): Promise<DeleteUserDtoResponse> {
@@ -107,7 +114,7 @@ export class UsersController {
   @UseGuards(TokensGuard)
   @Roles(RolesTypes.Admin)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete All Users' })
+  @ApiOperation({ summary: 'Delete All Users [Admin]' })
   @ApiOkResponse({ description: 'Success', type: DeleteAllUsersDtoResponse })
   @Delete('/deleteAll')
   deleteAll(): Promise<DeleteAllUsersDtoResponse> {
@@ -117,7 +124,8 @@ export class UsersController {
   @Roles(RolesTypes.Admin)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Generate Session Id' })
+  @ApiOperation({ summary: 'Generate Session Id [Admin]' })
+  @ApiOkResponse({ description: 'Successful response', type: SessionIdDtoResponse })
   @Post('/generateSessionId')
   async generateSessionId(): Promise<SessionId> {
     try {

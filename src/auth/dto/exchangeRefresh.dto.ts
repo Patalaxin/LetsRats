@@ -1,8 +1,12 @@
-import { IsEmail, IsNotEmpty, IsOptional } from "class-validator";
+import { IsEmail, IsNotEmpty } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ExchangeRefreshDto {
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'The email address of the newly created user',
+  })
   @IsEmail()
   @IsNotEmpty()
-  @IsOptional()
-  email?: string;
+  email: string;
 }
