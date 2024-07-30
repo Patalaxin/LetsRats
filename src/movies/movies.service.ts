@@ -10,6 +10,7 @@ import { PopularMoviesQueryDto } from "./dto/get-popular-movies.dto";
 import { MovieDetailsResponseDto } from "./dto/get-movie-details.dto";
 import { TopRatedMoviesQueryDto } from "./dto/get-top-rated-movies.dto";
 import { MoviesRecommendationsQueryDto } from "./dto/get-movies-recommendations.dto";
+import { MovieActorsDto } from "./dto/get-actors-by-movie.dto";
 
 @Injectable()
 export class MoviesService {
@@ -86,6 +87,21 @@ export class MoviesService {
 
     const response = await lastValueFrom(
       this.httpService.get(url, config),
+    );
+    return response.data;
+  }
+
+  async getMovieActors(movie_id: number, language?: string): Promise<MovieActorsDto> {
+    const params: AxiosRequestConfig = {
+      params: {
+        api_key: process.env.TMDB_API_KEY,
+        language,
+      },
+    };
+    const url = `${process.env.TMDB_URL}movie/${movie_id}/credits`;
+
+    const response = await lastValueFrom(
+      this.httpService.get(url, params),
     );
     return response.data;
   }
