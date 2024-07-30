@@ -10,6 +10,7 @@ import { MovieDetailsResponseDto } from "./dto/get-movie-details.dto";
 import { TopRatedMoviesQueryDto } from "./dto/get-top-rated-movies.dto";
 import { MoviesRecommendationsQueryDto } from "./dto/get-movies-recommendations.dto";
 import { MovieActorsDto } from "./dto/get-actors-by-movie.dto";
+import { MovieVideosResponseDto } from "./dto/get-movie-videos.dto";
 
 @ApiTags('Movies API')
 @UseGuards(TokensGuard)
@@ -82,5 +83,13 @@ export class MoviesController {
     @Query('language') language?: string
   ): Promise<MovieActorsDto> {
     return this.moviesService.getMovieActors(movie_id, language);
+  }
+
+  @ApiOperation({ summary: 'Get trailers and teasers for a movie' })
+  @ApiOkResponse({ description: 'Successful response', type: MovieVideosResponseDto })
+  @ApiParam({ name: 'movieId', description: 'ID of the movie' })
+  @Get('videos/:movieId')
+  async getMovieVideos(@Param('movieId') movieId: number): Promise<MovieVideosResponseDto> {
+    return this.moviesService.getMovieVideos(movieId);
   }
 }
