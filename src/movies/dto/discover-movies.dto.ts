@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class DiscoverMoviesQueryDto {
   @ApiPropertyOptional({ example: 'en', description: 'The language of the movies' })

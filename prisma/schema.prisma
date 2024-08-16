@@ -36,3 +36,24 @@ model Token {
 model SessionId {
   id String @id @default(uuid()) @map("_id")
 }
+
+model Ratings {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  plot_rating    Int
+  music_rating   Int
+  acting_rating  Int
+  overall_rating Int
+  Review         Review[]
+}
+
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  movie_id    Int
+  email       String
+  ratings     Ratings  @relation(fields: [ratingsId], references: [id])
+  review_text String
+  created_at  DateTime @default(now())
+  ratingsId   String   @db.ObjectId
+
+  @@unique([movie_id, email])
+}

@@ -7,14 +7,16 @@ import { MoviesModule } from '../movies/movies.module';
 import { HttpModule } from '@nestjs/axios';
 import { PersonsModule } from '../persons/persons.module';
 import { ImageModule } from '../image/image.module';
+import { ReviewsModule } from "../reviews/reviews.module";
 
 @Module({
   imports: [
-    UsersModule,
     AuthModule,
+    UsersModule,
     PrismaModule,
     MoviesModule,
     PersonsModule,
+    ReviewsModule,
     ImageModule,
     HttpModule,
     ConfigModule.forRoot({ isGlobal: true }),

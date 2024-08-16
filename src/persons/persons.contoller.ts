@@ -23,11 +23,11 @@ export class PersonsController {
   @ApiOperation({ summary: 'Get movies persons' })
   @ApiOkResponse({ description: 'Successful response', type: PersonMoviesResponseDto })
   @ApiParam({ name: 'personId', description: 'ID of the person' })
-  @Get('movies/:personId')
+  @Get('movies/:person_id')
   async getPersonMovieCredits(
-    @Param('personId') personId: number,
+    @Param('person_id') person_id: number,
     @Query() queryDto: PersonMoviesQueryDto,
   ): Promise<PersonMoviesResponseDto> {
-    return this.personsService.getPersonMovieCredits(personId, queryDto);
+    return this.personsService.getPersonMovieCredits(person_id, queryDto);
   }
 }

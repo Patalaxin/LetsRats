@@ -30,7 +30,7 @@ import { SessionIdDtoResponse } from "./dto/create-sessionId.dto";
 
 @ApiTags('User API')
 @UseGuards(RolesGuard)
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(@Inject('IUser') private readonly userInterface: IUser) {}
 
@@ -62,7 +62,7 @@ export class UsersController {
     description: 'Successful response',
     type: [GetUserDtoResponse],
   })
-  @Get('/findAll')
+  @Get('/all')
   async findAll(): Promise<GetUserDtoResponse[]> {
     return this.userInterface.findAll();
   }
@@ -73,7 +73,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change User Password' })
   @ApiOkResponse({ description: 'Success', type: ChangeUserPassDtoResponse })
-  @Put('/changePassword')
+  @Put('/change-password')
   changePassword(
     @GetEmailFromToken() email: string,
     @Body() updateUserPassDto: ChangeUserPassDtoRequest,
@@ -85,7 +85,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'Forgot User Password' })
   @ApiOkResponse({ description: 'Success', type: ForgotUserPassDtoResponse })
-  @Put('/forgotPassword')
+  @Put('/forgot-password')
   forgotPassword(@Body() forgotUserPassDto: ForgotUserPassDtoRequest): Promise<ForgotUserPassDtoResponse> {
     return this.userInterface.forgotPassword(forgotUserPassDto);
   }
@@ -96,7 +96,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update The User Role [Admin]' })
   @ApiOkResponse({ description: 'Success', type: UpdateUserRoleDtoResponse })
-  @Put('/updateRole')
+  @Put('/role')
   updateRole(@Body() updateUserRoleDto: UpdateUserRoleDtoRequest): Promise<UpdateUserRoleDtoResponse> {
     return this.userInterface.updateRole(updateUserRoleDto);
   }
@@ -116,7 +116,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete All Users [Admin]' })
   @ApiOkResponse({ description: 'Success', type: DeleteAllUsersDtoResponse })
-  @Delete('/deleteAll')
+  @Delete('/all')
   deleteAll(): Promise<DeleteAllUsersDtoResponse> {
     return this.userInterface.deleteAll();
   }
@@ -126,7 +126,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Generate Session Id [Admin]' })
   @ApiOkResponse({ description: 'Successful response', type: SessionIdDtoResponse })
-  @Post('/generateSessionId')
+  @Post('/generate-session-id')
   async generateSessionId(): Promise<SessionId> {
     try {
       return this.userInterface.generateSessionId();

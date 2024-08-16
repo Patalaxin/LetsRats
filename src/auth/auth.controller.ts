@@ -21,7 +21,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Login' })
   @ApiOkResponse({ description: 'Successful response', type: SignInDtoResponse })
-  @Post('exchangeRefresh')
+  @Post('exchange-refresh')
   exchangeRefresh(
     @Res({ passthrough: true }) res: Response,
     @Req() req: Request,

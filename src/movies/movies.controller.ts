@@ -35,7 +35,7 @@ export class MoviesController {
   }
 
   @ApiOperation({ summary: 'Get Movies by Genres' })
-  @Get('discoverByGenres')
+  @Get('discover-by-genres')
   @ApiOkResponse({ description: 'Successful response', type: SearchMovieResponseDto })
   async discoverMovies(@Query() query: DiscoverMoviesQueryDto): Promise<SearchMovieResponseDto> {
     return this.moviesService.discoverMovies(query);
@@ -49,14 +49,14 @@ export class MoviesController {
   }
 
   @ApiOperation({ summary: 'Get Top Rated Movies' })
-  @Get('top_rated')
+  @Get('top-rated')
   @ApiOkResponse({ description: 'Successful response', type: SearchMovieResponseDto })
   async getTopRatedMovies(@Query() query: TopRatedMoviesQueryDto): Promise<SearchMovieResponseDto> {
     return this.moviesService.getTopRatedMovies(query);
   }
 
   @ApiOperation({ summary: 'Get Movie Details' })
-  @Get('movieDetails/:movie_id')
+  @Get('movie-details/:movie_id')
   @ApiParam({ name: 'movie_id', description: 'ID of the movie to retrieve' })
   @ApiOkResponse({ description: 'Successful response', type: MovieDetailsResponseDto })
   async getMovieDetails(@Param('movie_id') movie_id: number): Promise<MovieDetailsResponseDto> {
@@ -87,9 +87,9 @@ export class MoviesController {
 
   @ApiOperation({ summary: 'Get trailers and teasers for a movie' })
   @ApiOkResponse({ description: 'Successful response', type: MovieVideosResponseDto })
-  @ApiParam({ name: 'movieId', description: 'ID of the movie' })
-  @Get('videos/:movieId')
-  async getMovieVideos(@Param('movieId') movieId: number): Promise<MovieVideosResponseDto> {
-    return this.moviesService.getMovieVideos(movieId);
+  @ApiParam({ name: 'movie_id', description: 'ID of the movie' })
+  @Get('videos/:movie_id')
+  async getMovieVideos(@Param('movie_id') movie_id: number): Promise<MovieVideosResponseDto> {
+    return this.moviesService.getMovieVideos(movie_id);
   }
 }
